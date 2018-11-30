@@ -38,17 +38,22 @@ public abstract class SingleShareIntent extends ShareIntent {
             } else {
                 System.out.println("NOT INSTALLED");
                 String url = "";
-                if(getDefaultWebLink() != null) {
-                    // Check if default url has valid replacement strings.
-                    // Replace was failing on pixel phones when there was no match?!
-                    if(getDefaultWebLink().contains("{url}") && getDefaultWebLink().contains("{message}")) {
-                        url = getDefaultWebLink()
-                                .replace("{url}",    this.urlEncode( options.getString("url") ) )
-                                .replace("{message}",this.urlEncode( options.getString("message") ));
-                    } else if(getDefaultWebLink().contains("{url}") && !getDefaultWebLink().contains("{message}")) {
-                        url = getDefaultWebLink().replace("{url}",this.urlEncode( options.getString("url") ) );
-                    } else if(getDefaultWebLink().contains("{message}") && !getDefaultWebLink().contains("{url}")) {
-                        url = getDefaultWebLink().replace("{message}", this.urlEncode(options.getString("message")));
+                String defaultWebLink = getDefaultWebLink();
+                if(defaultWebLink != null) {
+                    // check if default url has valid replacement strings. Was failing on replace if strings were not present.
+                    if(defaultWebLink.contains("{url}") && defaultWebLink.contains("{message}"))
+                    {
+                        url = defaultWebLink
+                                .replace("{url}",    this.urlEncode( options.getString("url")))
+                                .replace("{message}",this.urlEncode( options.getString("message")));
+                    }
+                    else if(defaultWebLink.contains("{url}") && !defaultWebLink.contains("{message}"))
+                    {
+                        url = defaultWebLink.replace("{url}", this.urlEncode( options.getString("url")));
+                    }
+                    else if(defaultWebLink.contains("{message}") && !defaultWebLink.contains("{url}"))
+                    {
+                        url = defaultWebLink.replace("{message}", this.urlEncode(options.getString("message")));
                     }
                 } else if(getPlayStoreLink() != null) {
                     url = getPlayStoreLink();
