@@ -39,9 +39,17 @@ public abstract class SingleShareIntent extends ShareIntent {
                 System.out.println("NOT INSTALLED");
                 String url = "";
                 if(getDefaultWebLink() != null) {
-                    url = getDefaultWebLink()
-                            .replace("{url}",       this.urlEncode( options.getString("url") ) )
-                            .replace("{message}",   this.urlEncode( options.getString("message") ));
+                    // Check if default url has valid replacement strings.
+                    // Replace was failing on pixel phones when there was no match?!
+                    if(getDefaultWebLink().contains("{url}") && getDefaultWebLink().contains("{message}")) {
+                        url = getDefaultWebLink()
+                                .replace("{url}",    this.urlEncode( options.getString("url") ) )
+                                .replace("{message}",this.urlEncode( options.getString("message") ));
+                    } else if(getDefaultWebLink().contains("{url}") && !getDefaultWebLink().contains("{message}")) {
+                        url = getDefaultWebLink().replace("{url}",this.urlEncode( options.getString("url") ) );
+                    } else if(getDefaultWebLink().contains("{message}") && !getDefaultWebLink().contains("{url}")) {
+                        url = getDefaultWebLink().replace("{message}", this.urlEncode(options.getString("message")));
+                    }
                 } else if(getPlayStoreLink() != null) {
                     url = getPlayStoreLink();
                 } else {
