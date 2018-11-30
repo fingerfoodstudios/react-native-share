@@ -47,11 +47,11 @@ public abstract class SingleShareIntent extends ShareIntent {
                                 .replace("{url}",    this.urlEncode( options.getString("url")))
                                 .replace("{message}",this.urlEncode( options.getString("message")));
                     }
-                    else if(defaultWebLink.contains("{url}") && !defaultWebLink.contains("{message}"))
+                    else if(defaultWebLink.contains("{url}"))
                     {
                         url = defaultWebLink.replace("{url}", this.urlEncode( options.getString("url")));
                     }
-                    else if(defaultWebLink.contains("{message}") && !defaultWebLink.contains("{url}"))
+                    else if(defaultWebLink.contains("{message}"))
                     {
                         url = defaultWebLink.replace("{message}", this.urlEncode(options.getString("message")));
                     }
